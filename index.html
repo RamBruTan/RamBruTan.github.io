@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RamBruTan — Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-bg:      #00000a;
+      --color-text:    #d8dcf0;
+      --color-muted:   #45485e;
+      --color-blue:    rgb(100, 180, 255);
+      --color-purple:  rgb(160, 100, 255);
+      --color-pink:    rgb(255, 100, 180);
+      --nav-height:    54px;
+
+      /* Card background */
+      --card-bg:       rgba(8, 6, 18, 0.82);
+      --card-border:   rgba(100, 180, 255, 0.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: rgba(140, 60, 255, 0.4); color: #fff; }
+
+
+    /* Canvas, fixed background */
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: 0;
+    }
+
+
+    /* Nav, fixed navigation bar */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 300;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      background: rgba(4, 2, 14, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 2px solid rgba(255, 60, 155, 0.75);
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: #fff;
+    }
+    .nav-logo .accent { color: var(--color-blue); }
+
+    .nav-links { list-style: none; display: flex; gap: 2.5rem; }
+    .nav-links a {
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      color: var(--color-muted);
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--color-pink); }
+
+
+    /* Main scroll wrapper */
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+
+    /* Hero spacer */
+    #hero {
+      height: 100vh;
+      width: 100%;
+      background: transparent;
+      position: relative;
+    }
+
+    .hero-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(120, 140, 200, 0.30);
+      white-space: nowrap;
+      pointer-events: none;
+      animation: pulse 3s ease-in-out infinite;
+      transition: opacity 0.5s ease;
+    }
+    .hero-hint.hide { opacity: 0; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.30; }
+      50%       { opacity: 0.65; }
+    }
+
+
+    /* About section */
+    #about {
+      position: relative;
+      min-height: 100vh;
+      padding: calc(var(--nav-height) + 4rem) 2rem 6rem;
+      background: transparent;
+    }
+
+    /* The card that the text sits on */
+    .about-card {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 3rem 3.5rem;
+
+      /* Backdrop blur so the card feels layered */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .about-heading {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      text-shadow:
+        0 0 60px rgba(140, 60, 255, 0.45),
+        0 0 120px rgba(68, 155, 255, 0.12);
+    }
+
+    .about-bio {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: rgba(210, 215, 240, 0.75);
+      margin-bottom: 1.3rem;
+    }
+    .about-bio .highlight-pink { color: var(--color-pink); font-weight: 500; }
+    .about-bio .highlight-blue { color: var(--color-blue); font-weight: 500; }
+
+    .divider {
+      width: 64px; height: 1px;
+      background: linear-gradient(90deg,
+        rgba(100, 180, 255, 0.7),
+        rgba(140, 60, 255, 0.5),
+        rgba(255, 60, 175, 0.2));
+      margin: 2.5rem 0;
+    }
+
+    /* Skills grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem 3rem;
+    }
+
+    .skills-column-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.60rem;
+      letter-spacing: 0.30em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+    }
+    .skills-column-label.blue { color: rgba(100, 180, 255, 0.90); }
+    .skills-column-label.pink { color: rgba(255, 100, 180, 0.90); }
+
+    .skills-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .skills-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.92rem;
+      color: rgba(215, 220, 245, 0.80);
+    }
+
+    .sk { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .sk.b { background: rgba(100, 180, 255, 0.9); }
+    .sk.p { background: rgba(160, 100, 255, 0.9); }
+    .sk.m { background: rgba(255, 100, 180, 0.9); }
+
+    /* Buttons */
+    .button-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 3rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.72rem 1.75rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.60rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-solid { background: var(--color-blue); color: #000; }
+    .btn-solid:hover {
+      background: rgb(140, 210, 255);
+      box-shadow: 0 0 22px rgba(100, 180, 255, 0.45);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border: 1px solid rgba(160, 100, 255, 0.40);
+      color: rgba(185, 140, 255, 0.9);
+      background: transparent;
+    }
+    .btn-outline:hover {
+      border-color: rgba(160, 100, 255, 0.85);
+      background: rgba(160, 100, 255, 0.07);
+      box-shadow: 0 0 18px rgba(160, 100, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+
+    /* Footer, also on card */
+    footer {
+      position: relative;
+      z-index: 1;
+      background: rgba(4, 2, 14, 0.90);
+      border-top: 1px solid rgba(255, 60, 155, 0.20);
+      padding: 1.75rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.56rem;
+      letter-spacing: 0.22em;
+      color: var(--color-muted);
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: rgba(160, 100, 255, 0.25); border-radius: 2px; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1.25rem; }
+      .nav-links { gap: 1.5rem; }
+      .about-card { padding: 2rem 1.5rem; }
+      .skills-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed canvas background, never scrolls -->
+  <canvas id="canvas"></canvas>
+
+  <!-- Fixed nav sits above the canvas -->
+  <nav>
+    <span class="nav-logo">RamBruTan<span class="accent">.</span></span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Everything inside main scrolls over the fixed canvas -->
+  <main>
+
+    <!-- Hero transparent spacer, shows the canvas behind it -->
+    <section id="hero">
+      <p class="hero-hint" id="hero-hint">Move your cursor</p>
+    </section>
+
+    <!-- About content on a semi-transparent card -->
+    <section id="about">
+      <div class="about-card">
+
+        <h1 class="about-heading">About Me</h1>
+
+        <p class="about-bio">
+          I'm <span class="highlight-pink">Bruce Tan</span>, a developer, artist, and
+          mathematician who loves doing work at the intersection of STEM and art.
+          From web apps to paintings to researching stellations, I bring passion,
+          experimentation, and curiosity to everything I make.
+        </p>
+        <p class="about-bio">
+          In my personal life, aside from my aforementioned specializations, I also spin poi,
+          design and fold origami, and create Desmos graphs.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="skills-grid">
+          <div>
+            <p class="skills-column-label blue">Proficient In</p>
+            <ul class="skills-list">
+              <li><span class="sk b"></span>HTML / CSS</li>
+              <li><span class="sk b"></span>JavaScript</li>
+              <li><span class="sk b"></span>Java</li>
+              <li><span class="sk b"></span>C#</li>
+              <li><span class="sk b"></span>Python</li>
+            </ul>
+          </div>
+          <div>
+            <p class="skills-column-label pink">Currently Exploring</p>
+            <ul class="skills-list">
+              <li><span class="sk m"></span>TypeScript</li>
+              <li><span class="sk m"></span>React</li>
+              <li><span class="sk m"></span>Svelte</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <a href="projects.html" class="btn btn-solid">View My Work →</a>
+          <a href="contact.html"  class="btn btn-outline">Get In Touch</a>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span class="footer-text">© 2026 RamBruTan. All rights reserved.</span>
+  </footer>
+
+
+  <script>
+
+    // CANVAS SETUP
+    // The canvas is position:fixed in CSS, so its sized to fill the screen and never move it.
+
+    const canvas = document.getElementById('canvas');
+    const ctx    = canvas.getContext('2d');
+    const DPR    = Math.min(window.devicePixelRatio || 1, 2);
+
+    let canvasWidth  = 0;
+    let canvasHeight = 0;
+
+    function resizeCanvas() {
+      canvasWidth  = window.innerWidth;
+      canvasHeight = window.innerHeight;
+      canvas.width  = Math.round(canvasWidth  * DPR);
+      canvas.height = Math.round(canvasHeight * DPR);
+      canvas.style.width  = canvasWidth  + 'px';
+      canvas.style.height = canvasHeight + 'px';
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      rebuildStars();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+
+    // star background
+
+    const STAR_COUNT = 220;
+    let stars = [];
+
+    function rebuildStars() {
+      stars = [];
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push({
+          x:         Math.random() * canvasWidth,
+          y:         Math.random() * canvasHeight,
+          radius:    Math.random() * 0.9 + 0.15,
+          baseAlpha: Math.random() * 0.5 + 0.12,
+          phase:     Math.random() * Math.PI * 2,
+          frequency: Math.random() * 0.5 + 0.2,
+        });
+      }
+    }
+
+    function drawStars(timeSeconds) {
+      for (const star of stars) {
+        const alpha = star.baseAlpha * (0.5 + 0.5 * Math.sin(timeSeconds * star.frequency + star.phase));
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200, 210, 255, ${alpha.toFixed(3)})`;
+        ctx.fill();
+      }
+    }
+
+
+    // Mouse tracking
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    document.addEventListener('mousemove', function(event) {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+    });
+
+
+    // Physics constants
+
+    const DOT_RADIUS       = 20;
+    const DOT_MASS         = 1;
+    const CURSOR_MASS      = 3;
+    const G_CONSTANT       = 2800;
+    const SOFTENING_RADIUS = 120;   // prevents runaway acceleration up close
+    const DAMPING          = 0.980;
+    const MAX_SPEED        = 5;
+
+
+    // Dot definitions
+
+    const DOT_COLORS = [
+      '#fffaaa',  // pastel yellow
+      '#ffb4eb',  // pastel magenta
+      '#b4f0ff',  // pastel cyan
+    ];
+
+    const SPAWN_OFFSETS = [
+      { x: -0.40, y: -0.26 },
+      { x:  0.40, y: -0.32 },
+      { x:  0.00, y:  0.44 },
+    ];
+
+    const dots = DOT_COLORS.map(function(color, index) {
+      return {
+        color:    color,
+        x:        0,
+        y:        0,
+        vx:       0,
+        vy:       0,
+        born:     false,
+        popScale: 0,
+        popStart: 0,
+        index:    index,
+      };
+    });
+
+
+    // Animation State
+
+    let animationStartTime = null;
+    let lastFrameTime      = 0;
+    let allDotsSpawnedAt   = null;
+    let hasScrolled        = false;
+
+
+    // Easing
+
+    function easeOutBack(t) {
+      const c1 = 1.70158;
+      const c3 = c1 + 1;
+      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+    }
+
+
+    // Scroll Transition
+
+    function triggerScrollTransition() {
+      document.getElementById('hero-hint').classList.add('hide');
+
+      // Custom scroll, browser's built-in 'smooth' gives no control over duration or easing curve, so drive it manually with rAF
+
+      const scrollStart    = window.scrollY;
+      const scrollTarget   = document.getElementById('about').getBoundingClientRect().top + scrollStart;
+      const scrollDistance = scrollTarget - scrollStart;
+
+      // Total duration in milliseconds, increase to slow down
+      const DURATION = 1800;
+
+      // Ease-in-out sine: slow start, smooth middle, slow finish
+      function easeInOutSine(t) {
+        return -(Math.cos(Math.PI * t) - 1) / 2;
+      }
+
+      let startTime = null;
+
+      function scrollStep(timestamp) {
+        if (startTime === null) startTime = timestamp;
+
+        const elapsed  = timestamp - startTime;
+        const progress = Math.min(elapsed / DURATION, 1);   // clamp 0..1
+        const eased    = easeInOutSine(progress);
+
+        window.scrollTo(0, scrollStart + scrollDistance * eased);
+
+        if (progress < 1) {
+          requestAnimationFrame(scrollStep);
+        }
+      }
+
+      requestAnimationFrame(scrollStep);
+    }
+
+
+    // Update physics
+
+    function updatePhysics(timestamp) {
+
+      if (animationStartTime === null) {
+        animationStartTime = timestamp;
+        mouseX = canvasWidth  * 0.5;
+        mouseY = canvasHeight * 0.5;
+      }
+
+      const elapsedSeconds = (timestamp - animationStartTime) / 1000;
+      const deltaTime      = Math.min((timestamp - (lastFrameTime || timestamp)) / 1000, 0.05);
+      lastFrameTime = timestamp;
+
+      // Spawn dots at 0s, 0.33s, 0.66s
+      for (let i = 0; i < 3; i++) {
+        if (!dots[i].born && elapsedSeconds >= i * 0.33) {
+          const span  = Math.min(canvasWidth, canvasHeight) * 0.22;
+          dots[i].x   = canvasWidth  * 0.5 + SPAWN_OFFSETS[i].x * span + (Math.random() - 0.5) * 20;
+          dots[i].y   = canvasHeight * 0.5 + SPAWN_OFFSETS[i].y * span + (Math.random() - 0.5) * 20;
+          dots[i].vx  = (Math.random() - 0.5) * 0.6;
+          dots[i].vy  = (Math.random() - 0.5) * 0.6;
+          dots[i].born     = true;
+          dots[i].popStart = timestamp;
+          if (i === 2) allDotsSpawnedAt = timestamp;
+        }
+      }
+
+      // ─Trigger scroll after all 3 born + 0.5s pause
+      if (allDotsSpawnedAt !== null && !hasScrolled) {
+        if ((timestamp - allDotsSpawnedAt) / 1000 >= 0.55 + 0.50) {
+          hasScrolled = true;
+          triggerScrollTransition();
+        }
+      }
+
+      // Gravity
+      const softenSquared = SOFTENING_RADIUS * SOFTENING_RADIUS;
+
+      for (let i = 0; i < 3; i++) {
+        const dot = dots[i];
+        if (!dot.born) continue;
+
+        // Pop-in scale
+        const popProgress = Math.min((timestamp - dot.popStart) / 550, 1);
+        dot.popScale = popProgress < 1 ? Math.max(0, easeOutBack(popProgress)) : 1;
+
+        // Gravity from cursor
+        let dx = mouseX - dot.x;
+        let dy = mouseY - dot.y;
+        let softenedDistSq = dx * dx + dy * dy + softenSquared;
+        let dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
+        let acceleration = (G_CONSTANT * CURSOR_MASS) / softenedDistSq;
+        dot.vx += (dx / dist) * acceleration * deltaTime;
+        dot.vy += (dy / dist) * acceleration * deltaTime;
+
+        // Gravity from other dots
+        for (let j = 0; j < 3; j++) {
+          if (i === j || !dots[j].born) continue;
+          dx = dots[j].x - dot.x;
+          dy = dots[j].y - dot.y;
+          softenedDistSq = dx * dx + dy * dy + softenSquared;
+          dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
+          acceleration = (G_CONSTANT * DOT_MASS) / softenedDistSq;
+          dot.vx += (dx / dist) * acceleration * deltaTime;
+          dot.vy += (dy / dist) * acceleration * deltaTime;
+        }
+
+        // Damping + speed cap
+        dot.vx *= DAMPING;
+        dot.vy *= DAMPING;
+        const speed = Math.sqrt(dot.vx * dot.vx + dot.vy * dot.vy);
+        if (speed > MAX_SPEED) {
+          const ratio = MAX_SPEED / speed;
+          dot.vx *= ratio;
+          dot.vy *= ratio;
+        }
+
+        // Final addition for the movement
+        dot.x += dot.vx;
+        dot.y += dot.vy;
+      }
+    }
+
+
+    // Draw frame
+
+    function drawFrame(timestamp) {
+
+      // Semi-transparent clear, leaves a faint trail
+      ctx.fillStyle = 'rgba(0, 0, 8, 0.22)';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      drawStars(timestamp * 0.001);
+
+      // Solid pastel circles
+      for (const dot of dots) {
+        if (!dot.born || dot.popScale <= 0.005) continue;
+
+        ctx.save();
+        ctx.translate(dot.x, dot.y);
+        ctx.scale(dot.popScale, dot.popScale);
+
+        ctx.beginPath();
+        ctx.arc(0, 0, DOT_RADIUS, 0, Math.PI * 2);
+        ctx.fillStyle = dot.color;
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+
+    // Main loop
+
+    function animationLoop(timestamp) {
+      updatePhysics(timestamp);
+      drawFrame(timestamp);
+      requestAnimationFrame(animationLoop);
+    }
+
+
+    // Start
+
+    resizeCanvas();
+    requestAnimationFrame(animationLoop);
+
+  </script>
+</body>
+</html>
