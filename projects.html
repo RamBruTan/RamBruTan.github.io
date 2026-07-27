@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RamBruTan — Work & Projects</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-bg:      #00000a;
+      --color-text:    #d8dcf0;
+      --color-muted:   #45485e;
+      --color-blue:    rgb(100, 180, 255);
+      --color-purple:  rgb(160, 100, 255);
+      --color-pink:    rgb(255, 100, 180);
+      --nav-height:    54px;
+
+      /* Card background */
+      --card-bg:       rgba(8, 6, 18, 0.82);
+      --card-border:   rgba(100, 180, 255, 0.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: rgba(140, 60, 255, 0.4); color: #fff; }
+
+
+    /* Canvas, fixed background */
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: 0;
+    }
+
+
+    /* Nav, fixed navigation bar */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 300;
+      height: var(--nav-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      background: rgba(4, 2, 14, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 2px solid rgba(255, 60, 155, 0.75);
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: #fff;
+    }
+    .nav-logo .accent { color: var(--color-blue); }
+
+    .nav-links { list-style: none; display: flex; gap: 2.5rem; }
+    .nav-links a {
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      color: var(--color-muted);
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--color-pink); }
+
+    /* Main scroll wrapper */
+    main {
+      position: relative;
+      z-index: 1;
+      padding: calc(var(--nav-height) + 3rem) 2rem 6rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Page heading */
+    .page-heading {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      text-shadow:
+        0 0 60px rgba(140, 60, 255, 0.45),
+        0 0 120px rgba(68, 155, 255, 0.12);
+    }
+
+    /* Tab bar */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(100, 180, 255, 0.12);
+    }
+
+    .tab-btn {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: none;
+      color: var(--color-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .tab-btn:hover { color: var(--color-text); }
+
+    .tab-btn.active {
+      color: var(--color-pink);
+      border-bottom-color: rgba(255, 60, 155, 0.75);
+    }
+
+    /* Tab panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* Project grid with 2 columns */
+    .project-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    /* Project card */
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .project-card:hover {
+      border-color: rgba(100, 180, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
+    /* Screenshot/image area: replace background-color with background-image: url('placeholder.png') and set background-size: cover */
+    .project-img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: rgba(20, 15, 40, 0.8);
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    /* Placeholder icon shown when no image is set */
+    .project-img-placeholder {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+    }
+
+    .project-info {
+      padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    /* Colored project title: change the class to blue/purple/pink */
+    .project-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.6rem;
+    }
+    .project-title.pink   { color: var(--color-pink); }
+    .project-title.blue   { color: var(--color-blue); }
+    .project-title.purple { color: var(--color-purple); }
+
+    .project-desc {
+      font-size: 0.88rem;
+      line-height: 1.75;
+      color: rgba(210, 215, 240, 0.68);
+      margin-bottom: 1rem;
+    }
+
+    /* Project tags row */
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.52rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.28rem 0.65rem;
+      border-radius: 3px;
+      border: 1px solid rgba(100, 180, 255, 0.18);
+      color: rgba(180, 200, 255, 0.65);
+    }
+
+    /* Link on the card, optional */
+    .project-link {
+      display: inline-block;
+      margin-top: 0.85rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.54rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-blue);
+      transition: color 0.2s ease;
+    }
+    .project-link:hover { color: rgb(160, 210, 255); }
+
+    /* Art modal — full-screen overlay, clicking outside the card closes it */
+    #art-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    #art-modal.open {
+      display: flex;
+    }
+
+    .art-modal-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(160, 100, 255, 0.25);
+      border-radius: 8px;
+      max-width: 860px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 2rem 2.5rem 2.5rem;
+      position: relative;
+      /* Stop clicks on the card from bubbling up to the overlay */
+      pointer-events: all;
+    }
+
+    .art-modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--color-purple);
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .art-modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* Image side — same style as card image areas */
+    .art-modal-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background-color: rgba(20, 15, 40, 0.8);
+      background-size: cover;
+      background-position: center;
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .art-modal-desc {
+      font-size: 0.92rem;
+      line-height: 1.85;
+      color: rgba(210, 215, 240, 0.78);
+    }
+    
+    .art-modal-desc a {
+      color: var(--color-blue);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    
+.art-modal-desc a:hover {
+  color: rgb(160, 210, 255);
+}
+
+    @media (max-width: 640px) {
+      .art-modal-body { grid-template-columns: 1fr; }
+      .art-modal-card { padding: 1.5rem; }
+    }
+
+    /* Art cards open a modal, link cards redirect to data-href */
+    #tab-art .project-card,
+    #tab-research .project-card,
+    #tab-webapps .project-card,
+    #tab-misc .project-card {
+      cursor: pointer;
+    }
+
+    /* Footer, also on card */
+    footer {
+      position: relative;
+      z-index: 1;
+      background: rgba(4, 2, 14, 0.90);
+      border-top: 1px solid rgba(255, 60, 155, 0.20);
+      padding: 1.75rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.56rem;
+      letter-spacing: 0.22em;
+      color: var(--color-muted);
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: rgba(160, 100, 255, 0.25); border-radius: 2px; }
+
+    @media (max-width: 680px) {
+      nav { padding: 0 1.25rem; }
+      .nav-links { gap: 1.5rem; }
+      main { padding: calc(var(--nav-height) + 2rem) 1.25rem 4rem; }
+      .project-grid { grid-template-columns: 1fr; }
+      .tab-btn { padding: 0.65rem 1rem; font-size: 0.52rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed canvas background doesn't scroll -->
+  <canvas id="canvas"></canvas>
+
+  <!-- Fixed nav sits above the canvas -->
+  <nav>
+    <a href="https://github.com/RamBruTan" class="nav-logo">RamBruTan<span class="accent">.</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="projects.html">Work & Projects</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <h1 class="page-heading">Work & Projects</h1>
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('research',  this)">Research</button>
+      <button class="tab-btn"        onclick="switchTab('webapps',   this)">Web Apps</button>
+      <button class="tab-btn"        onclick="switchTab('art',       this)">Art & Works</button>
+      <button class="tab-btn"        onclick="switchTab('misc',      this)">Misc</button>
+    </div>
+
+    <!-- RESEARCH TAB -->
+    <div class="tab-panel active" id="tab-research">
+      <div class="project-grid">
+
+        <!-- PLACEHOLDER: duplicate this block to add more research entries.
+             Set data-href to the URL of the paper/project to link to. -->
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://rambrutan.github.io/human-art-in-the-age-of-ai/"
+>
+          <div class="project-img" style="background-image: url('images/PaperTitle.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title blue">A Productivity Fixated World in the Age of AI: Investigating The Purpose of Human Art</div>
+            <p class="project-desc">
+              Research I conducted as a high school student on exploring the purpose of human art (and creativity in general) in a world that is becoming increasingly fixated on AI. This research analyses this through the lens of the impact of AI substitution on the artist.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Art</span>
+              <span class="tag">Psychology</span>
+              <span class="tag">AI</span>
+            </div>
+            <a href="https://rambrutan.github.io/human-art-in-the-age-of-ai/" class="project-link">View Website</a>
+            <a href="https://rambrutan.github.io/human-art-in-the-age-of-ai/Bruce%20Tan%20-%20Synthesis%20Paper.pdf" class="project-link">Read The Paper</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WEB APPS TAB -->
+    <div class="tab-panel" id="tab-webapps">
+      <div class="project-grid">
+
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://rambrutan.github.io/matrix-calculator/">
+          <div class="project-img" style="background-image: url('images/MatrixCalculator.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title pink">Matrix Calculator</div>
+            <p class="project-desc">
+              Desmos style typing environment that supports matrices, along with a variety of other functions as seen in the documentation.
+            </p>
+            <div class="project-tags">
+              <span class="tag">TypeScript</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ART & WORKS TAB -->
+    <div class="tab-panel" id="tab-art">
+      <div class="project-grid">
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Crossroads"
+             data-img="images/Crossroads.png"
+             data-desc="3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect. Selected as a featured graph for the 2025 art contest! <a href='https://www.desmos.com/3d/b8gnp1ne4g?invertedColors' target='_blank'>View here</a>.">
+          <div class="project-img" style="background-image: url('images/Crossroads.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Crossroads</div>
+            <p class="project-desc">
+              3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Digital</span>
+              <span class="tag">Desmos Graphing Calculator</span>
+            </div>
+            <a href="https://www.desmos.com/3d/b8gnp1ne4g?invertedColors" class="project-link">View On Desmos</a>
+          </div>
+        </div>
+        
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Explorers"
+             data-img="images/Explorers.png"
+             data-desc="Multimedia work that explores the idea of the vastness of the universe, with differences shown through usage of different mediums, or exploring the universe by exploring differing mediums.">
+          <div class="project-img" style="background-image: url('images/Explorers.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Explorers</div>
+            <p class="project-desc">
+              Multimedia work that explores the idea of the vastness of the universe, with differences shown through usage of different mediums.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Painting</span>
+              <span class="tag">Acrylic</span>
+              <span class="tag">Oil</span>
+              <span class="tag">Watercolor</span>
+              <span class="tag">Clay</span>
+              <span class="tag">Crochet</span>
+              <span class="tag">Digital</span>
+              <span class="tag">Charcoal</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Lightning in a Bottle"
+             data-img="images/LightningInABottle.png"
+             data-desc="A work depicting electricity and power. I decided to use digital art, quite literally being electronic art. To make the complexity of the lightning, I decided to make a fractal,  and to add more impact to the lightning, I decided to layer the printed piece behind plexiglass, and then break the plexiglass with a hammer to create cracks.">
+          <div class="project-img" style="background-image: url('images/LightningInABottle.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Lightning in a Bottle</div>
+            <p class="project-desc">
+              A work exploring electricity and power.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Digital</span>
+              <span class="tag">Glass Cracking</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Pyrotechnics!"
+             data-img="images/Pyrotechnics!.png"
+             data-desc="For this piece, I wanted to explore explosions and fire! So I asked myself, what art media is related to fire, and how I can I use it to depict a subject matter also both related to art and science? I decided to cover pyrotechnics, the art and science of designing things such as fireworks, as well as a fire on a hearth. For the media, I focused on woodburning, defining values by burning the wood to darken it.">
+          <div class="project-img" style="background-image: url('images/Pyrotechnics!.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Pyrotechnics!</div>
+            <p class="project-desc">
+              A work exploring the beauty of fire and explosions.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Woodburning</span>
+              <span class="tag">Watercolor</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Suspended In Starlight"
+             data-img="images/SuspendedInStarlight.jpg"
+             data-desc="A portrait of myself, exploring color and light.">
+          <div class="project-img" style="background-image: url('images/SuspendedInStarlight.jpg')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Suspended In Starlight</div>
+            <p class="project-desc">
+              A portrait of myself, exploring color and light.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Acrylic</span>
+              <span class="tag">Oil</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="That Thing They Call Freedom"
+             data-img="images/ThatThingTheyCallFreedom.jpg"
+             data-desc="A piece exploring existentialism, alongside the fear of death and ending.">
+          <div class="project-img" style="background-image: url('images/ThatThingTheyCallFreedom.jpg')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">That Thing They Call Freedom</div>
+            <p class="project-desc">
+              A piece exploring existentialism, alongside the fear of death and ending.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Oil</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="The Grand Machine"
+             data-img="images/TheGrandMachine.png"
+             data-desc="For this work, I focused on incorporating engineering into the piece through using the concept of a Rube Goldberg machine, while expanding on the idea by letting objects go into and leave the settings of multiple paintings as a part of the machine. The machine is meant to show the wide, varied experiences that occur throughout life and existence, before these life experiences lead to motivate in the creation of art, shown by the brush dropping into the hand at the end of the machine.">
+          <div class="project-img" style="background-image: url('images/TheGrandMachine.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">The Grand Machine</div>
+            <p class="project-desc">
+              A multimedia work exploring the interconnectedness of various systems and phenomena on earth, in a rube-goldberg-esque machine depiction.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Acrylic</span>
+              <span class="tag">Various Craft Materials</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="To Live"
+             data-img="images/ToLive.jpg"
+             data-desc="A work exploring text use, based off of a personal favorite quote. If you fear judgement and let yourself be controlled and shackled, you will never achieve as vibrant a life.">
+          <div class="project-img" style="background-image: url('images/ToLive.jpg')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">To Live</div>
+            <p class="project-desc">
+              A work exploring text use, based off of a personal favorite quote.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Acrylic</span>
+              <span class="tag">Oil</span>
+              <span class="tag">Digital</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MISC TAB -->
+    <div class="tab-panel" id="tab-misc">
+      <div class="project-grid">
+
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://www.youtube.com/@AzimuthPoi">
+          <div class="project-img" style="background-image: url('images/PoiYoutube.JPG')">
+          </div>
+          <div class="project-info">
+            <div class="project-title blue">Azimuth Poi (Youtube Channel)</div>
+            <p class="project-desc">
+              Youtube channel where I post videos of my poi spinning!
+            </p>
+            <div class="project-tags">
+              <span class="tag">Youtube Channel</span>
+              <span class="tag">Poi Spinning</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <span class="footer-text">© 2026 RamBruTan. All rights reserved.</span>
+  </footer>
+
+
+  <!-- Art modal — populated by openArtModal(), clicking the overlay closes it -->
+  <div id="art-modal" onclick="handleModalClick(event)">
+    <div class="art-modal-card">
+      <div class="art-modal-title" id="modal-title"></div>
+      <div class="art-modal-body">
+        <div class="art-modal-img"  id="modal-img"></div>
+        <div class="art-modal-desc" id="modal-desc"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    function openArtModal(card) {
+      const title = card.getAttribute('data-title') || '';
+      const img   = card.getAttribute('data-img')   || '';
+      const desc  = card.getAttribute('data-desc')  || '';
+
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-desc').innerHTML = desc;
+
+      const imgEl = document.getElementById('modal-img');
+      if (img) {
+        imgEl.style.backgroundImage = `url('${img}')`;
+        imgEl.textContent = '';
+      } else {
+        imgEl.style.backgroundImage = '';
+        imgEl.textContent = 'No image provided';
+      }
+
+      document.getElementById('art-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';   // prevent background scroll
+    }
+
+    function closeArtModal() {
+      document.getElementById('art-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close when clicking the overlay (outside the card)
+    function handleModalClick(event) {
+      if (event.target === document.getElementById('art-modal')) {
+        closeArtModal();
+      }
+    }
+
+    // Also close on Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') closeArtModal();
+    });
+
+
+    // TAB SWITCHING
+    function switchTab(name, btn) {
+      // Deactivate all tabs and panels
+      document.querySelectorAll('.tab-btn').forEach(function(b)   { b.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+
+      // Activate the chosen one
+      btn.classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+
+
+    // CANVAS SETUP
+    // The canvas is position:fixed in CSS, so its sized to fill the screen and never move it.
+
+    const canvas = document.getElementById('canvas');
+    const ctx    = canvas.getContext('2d');
+    const DPR    = Math.min(window.devicePixelRatio || 1, 2);
+
+    let canvasWidth  = 0;
+    let canvasHeight = 0;
+
+    function resizeCanvas() {
+      canvasWidth  = window.innerWidth;
+      canvasHeight = window.innerHeight;
+      canvas.width  = Math.round(canvasWidth  * DPR);
+      canvas.height = Math.round(canvasHeight * DPR);
+      canvas.style.width  = canvasWidth  + 'px';
+      canvas.style.height = canvasHeight + 'px';
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      rebuildStars();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+
+    // star background
+
+    const STAR_COUNT = 220;
+    let stars = [];
+
+    function rebuildStars() {
+      stars = [];
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push({
+          x:         Math.random() * canvasWidth,
+          y:         Math.random() * canvasHeight,
+          radius:    Math.random() * 0.9 + 0.15,
+          baseAlpha: Math.random() * 0.5 + 0.12,
+          phase:     Math.random() * Math.PI * 2,
+          frequency: Math.random() * 0.5 + 0.2,
+        });
+      }
+    }
+
+    function drawStars(timeSeconds) {
+      for (const star of stars) {
+        const alpha = star.baseAlpha * (0.5 + 0.5 * Math.sin(timeSeconds * star.frequency + star.phase));
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200, 210, 255, ${alpha.toFixed(3)})`;
+        ctx.fill();
+      }
+    }
+
+
+    // Draw frame
+
+    function drawFrame(timestamp) {
+
+      // Semi-transparent clear, leaves a faint trail
+      ctx.fillStyle = 'rgba(0, 0, 8, 0.22)';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      drawStars(timestamp * 0.001);
+    }
+
+
+    // Main loop
+
+    function animationLoop(timestamp) {
+      drawFrame(timestamp);
+      requestAnimationFrame(animationLoop);
+    }
+
+
+    // Start
+
+    resizeCanvas();
+    requestAnimationFrame(animationLoop);
+
+  </script>
+</body>
+</html>
