@@ -1,3 +1,4 @@
+<!-- #region main HTML stuff -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,374 +10,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
 
-  <style>
-    :root {
-      --color-bg:      #00000a;
-      --color-text:    #d8dcf0;
-      --color-muted:   #45485e;
-      --color-blue:    rgb(100, 180, 255);
-      --color-purple:  rgb(160, 100, 255);
-      --color-pink:    rgb(255, 100, 180);
-      --nav-height:    54px;
-
-      /* Card background */
-      --card-bg:       rgba(8, 6, 18, 0.82);
-      --card-border:   rgba(100, 180, 255, 0.07);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; }
-
-    body {
-      background-color: var(--color-bg);
-      color: var(--color-text);
-      font-family: 'Outfit', sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-    }
-
-    a { text-decoration: none; color: inherit; }
-    ::selection { background: rgba(140, 60, 255, 0.4); color: #fff; }
-
-
-    /* Canvas, fixed background */
-    #canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: block;
-      z-index: 0;
-    }
-
-
-    /* Nav, fixed navigation bar */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 300;
-      height: var(--nav-height);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2.5rem;
-      background: rgba(4, 2, 14, 0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 2px solid rgba(255, 60, 155, 0.75);
-    }
-
-    .nav-logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: #fff;
-    }
-    .nav-logo .accent { color: var(--color-blue); }
-
-    .nav-links { list-style: none; display: flex; gap: 2.5rem; }
-    .nav-links a {
-      font-size: 0.8rem;
-      letter-spacing: 0.06em;
-      color: var(--color-muted);
-      transition: color 0.2s ease;
-    }
-    .nav-links a:hover { color: var(--color-pink); }
-
-    /* Main scroll wrapper */
-    main {
-      position: relative;
-      z-index: 1;
-      padding: calc(var(--nav-height) + 3rem) 2rem 6rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    /* Page heading */
-    .page-heading {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      color: #fff;
-      text-align: center;
-      margin-bottom: 2.5rem;
-      text-shadow:
-        0 0 60px rgba(140, 60, 255, 0.45),
-        0 0 120px rgba(68, 155, 255, 0.12);
-    }
-
-    /* Tab bar */
-    .tab-bar {
-      display: flex;
-      gap: 0;
-      justify-content: center;
-      margin-bottom: 2.5rem;
-      border-bottom: 1px solid rgba(100, 180, 255, 0.12);
-    }
-
-    .tab-btn {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.58rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-weight: 700;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      background: none;
-      color: var(--color-muted);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      transition: color 0.2s ease, border-color 0.2s ease;
-    }
-
-    .tab-btn:hover { color: var(--color-text); }
-
-    .tab-btn.active {
-      color: var(--color-pink);
-      border-bottom-color: rgba(255, 60, 155, 0.75);
-    }
-
-    /* Tab panels */
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
-
-    /* Project grid with 2 columns */
-    .project-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
-    /* Project card */
-    .project-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 6px;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .project-card:hover {
-      border-color: rgba(100, 180, 255, 0.22);
-      transform: translateY(-2px);
-    }
-
-    /* Screenshot/image area: replace background-color with background-image: url('placeholder.png') and set background-size: cover */
-    .project-img {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background-color: rgba(20, 15, 40, 0.8);
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid var(--card-border);
-    }
-
-    /* Placeholder icon shown when no image is set */
-    .project-img-placeholder {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.55rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--color-muted);
-    }
-
-    .project-info {
-      padding: 1.25rem 1.5rem 1.5rem;
-    }
-
-    /* Colored project title: change the class to blue/purple/pink */
-    .project-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.6rem;
-    }
-    .project-title.pink   { color: var(--color-pink); }
-    .project-title.blue   { color: var(--color-blue); }
-    .project-title.purple { color: var(--color-purple); }
-
-    .project-desc {
-      font-size: 0.88rem;
-      line-height: 1.75;
-      color: rgba(210, 215, 240, 0.68);
-      margin-bottom: 1rem;
-    }
-
-    /* Project tags row */
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
-    .tag {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.52rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 0.28rem 0.65rem;
-      border-radius: 3px;
-      border: 1px solid rgba(100, 180, 255, 0.18);
-      color: rgba(180, 200, 255, 0.65);
-    }
-
-    /* Link on the card, optional */
-    .project-link {
-      display: inline-block;
-      margin-top: 0.85rem;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.54rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--color-blue);
-      transition: color 0.2s ease;
-    }
-    .project-link:hover { color: rgb(160, 210, 255); }
-
-    /* Art modal — full-screen overlay, clicking outside the card closes it */
-    #art-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 400;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    #art-modal.open {
-      display: flex;
-    }
-
-    .art-modal-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(160, 100, 255, 0.25);
-      border-radius: 8px;
-      max-width: 860px;
-      width: 100%;
-      max-height: 85vh;
-      overflow-y: auto;
-      padding: 2rem 2.5rem 2.5rem;
-      position: relative;
-      /* Stop clicks on the card from bubbling up to the overlay */
-      pointer-events: all;
-    }
-
-    .art-modal-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      color: var(--color-purple);
-      text-align: center;
-      margin-bottom: 1.75rem;
-    }
-
-    .art-modal-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      align-items: start;
-    }
-
-    /* Image side — same style as card image areas */
-    .art-modal-img {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      background-color: rgba(20, 15, 40, 0.8);
-      background-size: cover;
-      background-position: center;
-      border-radius: 4px;
-      border: 1px solid var(--card-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .art-modal-desc {
-      font-size: 0.92rem;
-      line-height: 1.85;
-      color: rgba(210, 215, 240, 0.78);
-    }
-    
-    .art-modal-desc a {
-      color: var(--color-blue);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-    
-.art-modal-desc a:hover {
-  color: rgb(160, 210, 255);
-}
-
-    @media (max-width: 640px) {
-      .art-modal-body { grid-template-columns: 1fr; }
-      .art-modal-card { padding: 1.5rem; }
-    }
-
-    /* Art cards open a modal, link cards redirect to data-href */
-    #tab-art .project-card,
-    #tab-research .project-card,
-    #tab-webapps .project-card,
-    #tab-misc .project-card {
-      cursor: pointer;
-    }
-
-    /* Footer, also on card */
-    footer {
-      position: relative;
-      z-index: 1;
-      background: rgba(4, 2, 14, 0.90);
-      border-top: 1px solid rgba(255, 60, 155, 0.20);
-      padding: 1.75rem 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-text {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.56rem;
-      letter-spacing: 0.22em;
-      color: var(--color-muted);
-    }
-
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: #000; }
-    ::-webkit-scrollbar-thumb { background: rgba(160, 100, 255, 0.25); border-radius: 2px; }
-
-    @media (max-width: 680px) {
-      nav { padding: 0 1.25rem; }
-      .nav-links { gap: 1.5rem; }
-      main { padding: calc(var(--nav-height) + 2rem) 1.25rem 4rem; }
-      .project-grid { grid-template-columns: 1fr; }
-      .tab-btn { padding: 0.65rem 1rem; font-size: 0.52rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="global.css" />
 </head>
-<body>
+<body class="page-projects">
 
   <!-- Fixed canvas background doesn't scroll -->
   <canvas id="canvas"></canvas>
 
   <!-- Fixed nav sits above the canvas -->
   <nav>
-    <a href="https://github.com/RamBruTan" class="nav-logo">RamBruTan<span class="accent">.</span></a>
+    <a href="https://github.com/RamBruTan" class="nav-logo">RamBruTan<span class="accent"></span></a>
     <ul class="nav-links">
       <li><a href="index.html#about">About</a></li>
       <li><a href="projects.html">Work & Projects</a></li>
@@ -387,91 +30,26 @@
   <main>
 
     <h1 class="page-heading">Work & Projects</h1>
-
+    <div class="project-card" style="text-align: center;">
+      <p>I put whatever stuff I'm working on here, be it years-long projects, or just things I whip up in my free time!</p>
+      <br />
+      <p>When something fits into multiple categories, I'll put it under the more specific category, so origami wouldn't go under "Art & Works." However, this is somewhat arbitrary, and if I feel it fits in multiple equally well, I may put the same project in multiple categories.</p>
+    </div>
     <!-- Tab bar -->
     <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('research',  this)">Research</button>
+      <button class="tab-btn active" onclick="switchTab('art',       this)">Art & Works</button>
+      <button class="tab-btn"        onclick="switchTab('research',  this)">Research</button>
       <button class="tab-btn"        onclick="switchTab('webapps',   this)">Web Apps</button>
-      <button class="tab-btn"        onclick="switchTab('art',       this)">Art & Works</button>
+      <button class="tab-btn"        onclick="switchTab('origami',    this)">Origami</button>
+      <button class="tab-btn"        onclick="switchTab('desmos',    this)">Desmos</button>
       <button class="tab-btn"        onclick="switchTab('misc',      this)">Misc</button>
     </div>
+    
+<!-- #endregion-->
 
-    <!-- RESEARCH TAB -->
-    <div class="tab-panel active" id="tab-research">
+    <!-- #region ART & WORKS TAB -->
+    <div class="tab-panel active" id="tab-art">
       <div class="project-grid">
-
-        <!-- PLACEHOLDER: duplicate this block to add more research entries.
-             Set data-href to the URL of the paper/project to link to. -->
-        <div class="project-card"
-             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
-             data-href="https://rambrutan.github.io/human-art-in-the-age-of-ai/"
->
-          <div class="project-img" style="background-image: url('images/PaperTitle.png')">
-          </div>
-          <div class="project-info">
-            <div class="project-title blue">A Productivity Fixated World in the Age of AI: Investigating The Purpose of Human Art</div>
-            <p class="project-desc">
-              Research I conducted as a high school student on exploring the purpose of human art (and creativity in general) in a world that is becoming increasingly fixated on AI. This research analyses this through the lens of the impact of AI substitution on the artist.
-            </p>
-            <div class="project-tags">
-              <span class="tag">Art</span>
-              <span class="tag">Psychology</span>
-              <span class="tag">AI</span>
-            </div>
-            <a href="https://rambrutan.github.io/human-art-in-the-age-of-ai/" class="project-link">View Website</a>
-            <a href="https://rambrutan.github.io/human-art-in-the-age-of-ai/Bruce%20Tan%20-%20Synthesis%20Paper.pdf" class="project-link">Read The Paper</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- WEB APPS TAB -->
-    <div class="tab-panel" id="tab-webapps">
-      <div class="project-grid">
-
-        <div class="project-card"
-             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
-             data-href="https://rambrutan.github.io/matrix-calculator/">
-          <div class="project-img" style="background-image: url('images/MatrixCalculator.png')">
-          </div>
-          <div class="project-info">
-            <div class="project-title pink">Matrix Calculator</div>
-            <p class="project-desc">
-              Desmos style typing environment that supports matrices, along with a variety of other functions as seen in the documentation.
-            </p>
-            <div class="project-tags">
-              <span class="tag">TypeScript</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ART & WORKS TAB -->
-    <div class="tab-panel" id="tab-art">
-      <div class="project-grid">
-
-        <div class="project-card"
-             onclick="openArtModal(this)"
-             data-title="Crossroads"
-             data-img="images/Crossroads.png"
-             data-desc="3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect. Selected as a featured graph for the 2025 art contest! <a href='https://www.desmos.com/3d/b8gnp1ne4g?invertedColors' target='_blank'>View here</a>.">
-          <div class="project-img" style="background-image: url('images/Crossroads.png')">
-          </div>
-          <div class="project-info">
-            <div class="project-title purple">Crossroads</div>
-            <p class="project-desc">
-              3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect.
-            </p>
-            <div class="project-tags">
-              <span class="tag">Digital</span>
-              <span class="tag">Desmos Graphing Calculator</span>
-            </div>
-            <a href="https://www.desmos.com/3d/b8gnp1ne4g?invertedColors" class="project-link">View On Desmos</a>
-          </div>
-        </div>
         
         <div class="project-card"
              onclick="openArtModal(this)"
@@ -514,6 +92,27 @@
               <span class="tag">Digital</span>
               <span class="tag">Glass Cracking</span>
             </div>
+          </div>
+        </div>
+
+        
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Crossroads"
+             data-img="images/Crossroads.png"
+             data-desc="3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect. Selected as a featured graph for the 2025 art contest! <a href='https://www.desmos.com/3d/b8gnp1ne4g?invertedColors' target='_blank'>View here</a>.">
+          <div class="project-img" style="background-image: url('images/Crossroads.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Crossroads</div>
+            <p class="project-desc">
+              3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Digital</span>
+              <span class="tag">Desmos Graphing Calculator</span>
+            </div>
+            <a href="https://www.desmos.com/3d/b8gnp1ne4g?invertedColors" class="project-link">View On Desmos</a>
           </div>
         </div>
 
@@ -614,8 +213,286 @@
 
       </div>
     </div>
+    <!-- #endregion-->
 
-    <!-- MISC TAB -->
+    <!-- #region RESEARCH TAB -->
+    <div class="tab-panel" id="tab-research">
+      <div class="project-grid">
+
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://rambrutan.github.io/human-art-in-the-age-of-ai/"
+>
+          <div class="project-img" style="background-image: url('images/PaperTitle.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title blue">A Productivity Fixated World in the Age of AI: Investigating The Purpose of Human Art</div>
+            <p class="project-desc">
+              Research I conducted as a high school student on exploring the purpose of human art (and creativity in general) in a world that is becoming increasingly fixated on AI. This research analyses this through the lens of the impact of AI substitution on the artist.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Art</span>
+              <span class="tag">Psychology</span>
+              <span class="tag">AI</span>
+            </div>
+            <a href="https://rambrutan.github.io/human-art-in-the-age-of-ai/" class="project-link">View Website</a>
+            <a href="https://rambrutan.github.io/human-art-in-the-age-of-ai/Bruce%20Tan%20-%20Synthesis%20Paper.pdf" class="project-link">Read The Paper</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- #endregion-->
+
+    <!-- #region WEB APPS TAB -->
+    <div class="tab-panel" id="tab-webapps">
+      <div class="project-grid">
+
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://rambrutan.github.io/matrix-calculator/">
+          <div class="project-img" style="background-image: url('images/MatrixCalculator.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title pink">Matrix Calculator</div>
+            <p class="project-desc">
+              Desmos style typing environment that supports matrices, along with a variety of other functions as seen in the documentation.
+            </p>
+            <div class="project-tags">
+              <span class="tag">TypeScript</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- #endregion-->
+    
+    <!-- #region ORIGAMI TAB -->
+    <div class="tab-panel" id="tab-origami">
+      <div class="project-grid">
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Kepler-Poinsot Polyhedra"
+             data-img="images/KeplerPoinsot.png"
+             data-desc="Modular models for the four Kepler-Poinsot polyhedra. Each model uses 30 modules, except for the great icosahedron, which uses 90 modules, and is the least stable.">
+          <div class="project-img" style="background-image: url('images/KeplerPoinsot.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Kepler-Poinsot Polyhedra</div>
+            <p class="project-desc">
+              Modular models for the four Kepler-Poinsot polyhedra.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Modular</span>
+              <span class="tag">Polyhedra</span>
+              <span class="tag">Original</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Dice"
+             data-img="images/Dice.png"
+             data-desc="Models for the 6 standard dice, AKA the 5 platonic solids, along with the pentagonal trapezohedron as the d10.">
+          <div class="project-img" style="background-image: url('images/Dice.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Dice</div>
+            <p class="project-desc">
+              Models for the 6 standard dice, AKA the 5 platonic solids, along with the pentagonal trapezohedron as the d10.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Modular</span>
+              <span class="tag">Polyhedra</span>
+              <span class="tag">Original</span>
+            </div>
+          </div>
+        </div>
+    
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Rhombic Triacontahedron"
+             data-img="images/RhombicTriacontahedron.png"
+             data-desc="Modular model for the rhombic triacontahedron, with 30 rhombic faces made from 30 modules.">
+          <div class="project-img" style="background-image: url('images/RhombicTriacontahedron.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Rhombic Triacontahedron</div>
+            <p class="project-desc">
+              Modular model for the rhombic triacontahedron, with 30 rhombic faces made from 30 modules.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Modular</span>
+              <span class="tag">Polyhedra</span>
+              <span class="tag">Original</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Witch"
+             data-img="images/AraAraWitch.png"
+             data-desc="One of my more complex folds so far, following Boice Wong's "Ara Ara" model and crease pattern. After completion, I also added a witch hat, making this model 2 pieces.">
+          <div class="project-img" style="background-image: url('images/AraAraWitch.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Witch</div>
+            <p class="project-desc">
+              One of my more complex folds so far, following Boice Wong's "Ara Ara" model and crease pattern. After completion, I also added a witch hat, making this model 2 pieces.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Human</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Emu"
+             data-img="images/Emu.PNG"
+             data-desc="An original model for an origami emu. One of my first original single-sheet models, which helped me to learn shaping.">
+          <div class="project-img" style="background-image: url('images/Emu.PNG')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Emu</div>
+            <p class="project-desc">
+              An original model for an origami emu.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Animal</span>
+              <span class="tag">Original</span>
+              <span class="tag">Single-Sheet</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #endregion-->
+
+    <!-- #region DESMOS STUFF TAB -->
+    <div class="tab-panel" id="tab-desmos">
+      <div class="project-grid">
+        
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://www.desmos.com/3d/gtqar3s7bd">
+          <div class="project-img" style="background-image: url('images/DomainColoring.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title blue">Domain Colorings</div>
+            <p class="project-desc">
+              Desmos-based domain coloring grapher for complex graphs, using color maps.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Grapher</span>
+              <span class="tag">Complex Analysis</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://www.desmos.com/3d/gzlqxytmqj">
+          <div class="project-img" style="background-image: url('images/DomainColoring.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title blue">Riemann Surfaces - Power Functions</div>
+            <p class="project-desc">
+              Desmos-based riemann surface grapher for power functions, using color maps, and a 3D graphing calculator to show the branches.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Grapher</span>
+              <span class="tag">Complex Analysis</span>
+              <span class="tag">3D</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="openArtModal(this)"
+             data-title="Crossroads"
+             data-img="images/Crossroads.png"
+             data-desc="3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect. Selected as a featured graph for the 2025 art contest! <a href='https://www.desmos.com/3d/b8gnp1ne4g?invertedColors' target='_blank'>View here</a>.">
+          <div class="project-img" style="background-image: url('images/Crossroads.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title purple">Crossroads</div>
+            <p class="project-desc">
+              3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Art</span>
+              <span class="tag">3D</span>
+            </div>
+            <a href="https://www.desmos.com/3d/b8gnp1ne4g?invertedColors" class="project-link">View On Desmos</a>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://www.desmos.com/calculator/rb6jhjojru">
+          <div class="project-img" style="background-image: url('images/PoiFlower.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title blue">Poi - Flower & 3rd Order Motion Visualizer</div>
+            <p class="project-desc">
+              Desmos-based visualizer for flowers and 3rd order motions, epicyclical patterns within poi spinning.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Poi Spinning</span>
+              <span class="tag">Visualizer</span>
+              <span class="tag">2D</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://www.desmos.com/3d/7ngidjdkau?translucentSurfaces=">
+          <div class="project-img" style="background-image: url('images/PoiToroid.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title blue">Poi - Toroid Visualizer</div>
+            <p class="project-desc">
+              Desmos-based visualizer for toroids, a type of move done within poi spinning similar to flowers, but the plane of the poi itself is also spinning.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Poi Spinning</span>
+              <span class="tag">Visualizer</span>
+              <span class="tag">3D</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')">
+          <div class="project-img" style="background-image: url('images/PoiToroidNotebook.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title blue">Poi - Toroid Visualizer [Desmos Notebook]</div>
+            <p class="project-desc">
+              Using Desmos notebook for the first time, based on my toroid visualizer. 2 Versions for thin and wider screens, linked below.
+            </p>
+            <div class="project-tags">
+              <span class="tag">Poi Spinning</span>
+              <span class="tag">Visualizer</span>
+              <span class="tag">Notebook</span>
+            </div>
+            <a href="https://www.desmos.com/notebook/i5alryqumz/view" class="project-link">Wide Screen/PC</a>
+            <br />
+            <a href="https://www.desmos.com/notebook/97xqvmzwmk/view" class="project-link">Thin Screen/Mobile</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- #endregion-->
+
+    <!-- #region MISC TAB -->
     <div class="tab-panel" id="tab-misc">
       <div class="project-grid">
 
@@ -635,9 +512,9 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
+    <!-- #endregion-->
 
   </main>
 
@@ -646,7 +523,7 @@
   </footer>
 
 
-  <!-- Art modal — populated by openArtModal(), clicking the overlay closes it -->
+  <!-- Art modal, clicking the overlay closes it -->
   <div id="art-modal" onclick="handleModalClick(event)">
     <div class="art-modal-card">
       <div class="art-modal-title" id="modal-title"></div>

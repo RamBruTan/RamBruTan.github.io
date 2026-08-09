@@ -1,0 +1,670 @@
+
+/* #region SHARED STUFF */
+
+:root {
+  --color-bg:      #00000a;
+  --color-text:    #d8dcf0;
+  --color-muted:   #45485e;
+  --color-blue:    rgb(100, 180, 255);
+  --color-purple:  rgb(160, 100, 255);
+  --color-pink:    rgb(255, 100, 180);
+  --nav-height:    54px;
+
+  /* Card background */
+  --card-bg:       rgba(8, 6, 18, 0.82);
+  --card-border:   rgba(100, 180, 255, 0.07);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+
+  /* min-height/flex only actually matters on the short contact page —
+     harmless here on index/projects since their content is already
+     taller than the viewport, so it's safe to share on every page. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a { text-decoration: none; color: inherit; }
+::selection { background: rgba(140, 60, 255, 0.4); color: #fff; }
+
+
+/* Canvas, fixed background */
+#canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: 0;
+}
+
+
+/* Nav, fixed navigation bar */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 300;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  background: rgba(4, 2, 14, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 2px solid rgba(255, 60, 155, 0.75);
+}
+
+.nav-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #fff;
+}
+.nav-logo .accent { color: var(--color-blue); }
+
+.nav-links { list-style: none; display: flex; gap: 2.5rem; }
+.nav-links a {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--color-pink); }
+
+
+/* Main scroll wrapper — page-specific padding/max-width added below */
+main {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* Page heading — used on projects.html and contact.html.
+   margin-bottom differs per page, so it's added in each page's section. */
+.page-heading {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-align: center;
+  text-shadow:
+    0 0 60px rgba(140, 60, 255, 0.45),
+    0 0 120px rgba(68, 155, 255, 0.12);
+}
+
+
+/* Footer, also on card */
+footer {
+  position: relative;
+  z-index: 1;
+  background: rgba(4, 2, 14, 0.90);
+  border-top: 1px solid rgba(255, 60, 155, 0.20);
+  padding: 1.75rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.22em;
+  color: var(--color-muted);
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: rgba(160, 100, 255, 0.25); border-radius: 2px; }
+
+/* #endregion */
+
+/* #region INDEX PAGE STUFF */
+
+/* Hero spacer */
+#hero {
+  height: 100vh;
+  width: 100%;
+  background: transparent;
+  position: relative;
+}
+
+/* Scroll text telling user to scroll */
+#scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  text-align: center;
+}
+
+#scroll-hint .arrow {
+  font-size: 1rem;
+  letter-spacing: 0;
+}
+
+/* About section */
+#about {
+  position: relative;
+  min-height: 100vh;
+  padding: calc(var(--nav-height) + 4rem) 2rem 6rem;
+  background: transparent;
+}
+
+/* The card that the text sits on */
+.about-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 3rem 3.5rem;
+
+  /* Backdrop blur so the card feels layered */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.about-heading {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  text-shadow:
+    0 0 60px rgba(140, 60, 255, 0.45),
+    0 0 120px rgba(68, 155, 255, 0.12);
+}
+
+.about-bio {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: rgba(210, 215, 240, 0.75);
+  margin-bottom: 1.3rem;
+}
+.about-bio .highlight-pink { color: var(--color-pink); font-weight: 500; }
+.about-bio .highlight-blue { color: var(--color-blue); font-weight: 500; }
+
+.divider {
+  width: 64px; height: 1px;
+  background: linear-gradient(90deg,
+    rgba(100, 180, 255, 0.7),
+    rgba(140, 60, 255, 0.5),
+    rgba(255, 60, 175, 0.2));
+  margin: 2.5rem 0;
+}
+
+/* Skills grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem 3rem;
+}
+
+.skills-column-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.60rem;
+  letter-spacing: 0.30em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+}
+.skills-column-label.blue { color: rgba(100, 180, 255, 0.90); }
+.skills-column-label.pink { color: rgba(255, 100, 180, 0.90); }
+
+.skills-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.skills-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.92rem;
+  color: rgba(215, 220, 245, 0.80);
+}
+
+.sk { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.sk.b { background: rgba(100, 180, 255, 0.9); }
+.sk.p { background: rgba(160, 100, 255, 0.9); }
+.sk.m { background: rgba(255, 100, 180, 0.9); }
+
+/* Buttons */
+.button-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 3rem; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.72rem 1.75rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.60rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn-solid { background: var(--color-blue); color: #000; }
+.btn-solid:hover {
+  background: rgb(140, 210, 255);
+  box-shadow: 0 0 22px rgba(100, 180, 255, 0.45);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  border: 1px solid rgba(160, 100, 255, 0.40);
+  color: rgba(185, 140, 255, 0.9);
+  background: transparent;
+}
+.btn-outline:hover {
+  border-color: rgba(160, 100, 255, 0.85);
+  background: rgba(160, 100, 255, 0.07);
+  box-shadow: 0 0 18px rgba(160, 100, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  body.page-index nav { padding: 0 1.25rem; }
+  body.page-index .nav-links { gap: 1.5rem; }
+  .about-card { padding: 2rem 1.5rem; }
+  .skills-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+/* #endregion */
+
+/* #region PROJECTS PAGE STUFF */
+
+body.page-projects main {
+  padding: calc(var(--nav-height) + 3rem) 2rem 6rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+body.page-projects .page-heading {
+  margin-bottom: 2.5rem;
+}
+
+/* Tab bar */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(100, 180, 255, 0.12);
+}
+
+.tab-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: none;
+  color: var(--color-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.tab-btn:hover { color: var(--color-text); }
+
+.tab-btn.active {
+  color: var(--color-pink);
+  border-bottom-color: rgba(255, 60, 155, 0.75);
+}
+
+/* Tab panels */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Project grid with 2 columns */
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* Project card */
+.project-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.project-card:hover {
+  border-color: rgba(100, 180, 255, 0.22);
+  transform: translateY(-2px);
+}
+
+/* Screenshot/image area */
+.project-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: rgba(20, 15, 40, 0.8);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--card-border);
+}
+
+/* Placeholder icon shown when no image is set */
+.project-img-placeholder {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.project-info {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+/* Colored project title: change the class to blue/purple/pink */
+.project-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.6rem;
+}
+.project-title.pink   { color: var(--color-pink); }
+.project-title.blue   { color: var(--color-blue); }
+.project-title.purple { color: var(--color-purple); }
+
+.project-desc {
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: rgba(210, 215, 240, 0.68);
+  margin-bottom: 1rem;
+}
+
+/* Project tags row */
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.65rem;
+  border-radius: 3px;
+  border: 1px solid rgba(100, 180, 255, 0.18);
+  color: rgba(180, 200, 255, 0.65);
+}
+
+/* Link on the card */
+.project-link {
+  display: inline-block;
+  margin-top: 0.85rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.54rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-blue);
+  transition: color 0.2s ease;
+}
+.project-link:hover { color: rgb(160, 210, 255); }
+
+/* Art modal, clicking outside the card closes it */
+#art-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+#art-modal.open {
+  display: flex;
+}
+
+.art-modal-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(160, 100, 255, 0.25);
+  border-radius: 8px;
+  max-width: 860px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 2rem 2.5rem 2.5rem;
+  position: relative;
+  /* Stop clicks on the card from bubbling up to the overlay */
+  pointer-events: all;
+}
+
+.art-modal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-purple);
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.art-modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Image side — same style as card image areas */
+.art-modal-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-color: rgba(20, 15, 40, 0.8);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 4px;
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.art-modal-desc {
+  font-size: 0.92rem;
+  line-height: 1.85;
+  color: rgba(210, 215, 240, 0.78);
+}
+
+.art-modal-desc a {
+  color: var(--color-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.art-modal-desc a:hover {
+  color: rgb(160, 210, 255);
+}
+
+@media (max-width: 640px) {
+  .art-modal-body { grid-template-columns: 1fr; }
+  .art-modal-card { padding: 1.5rem; }
+}
+
+/* Art cards open a modal, link cards redirect to data-href */
+#tab-art .project-card,
+#tab-research .project-card,
+#tab-webapps .project-card,
+#tab-misc .project-card {
+  cursor: pointer;
+}
+
+@media (max-width: 680px) {
+  body.page-projects nav { padding: 0 1.25rem; }
+  body.page-projects .nav-links { gap: 1.5rem; }
+  body.page-projects main { padding: calc(var(--nav-height) + 2rem) 1.25rem 4rem; }
+  .project-grid { grid-template-columns: 1fr; }
+  .tab-btn { padding: 0.65rem 1rem; font-size: 0.52rem; }
+}
+
+.project-card {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 1rem 1rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+
+/* #endregion */
+
+/* #region CONTACT PAGE STUFF */
+
+body.page-contact main {
+  padding: calc(var(--nav-height) + 3rem) 2rem 6rem;
+  max-width: 700px;
+  margin: 0 auto;
+  width: 100%;
+  flex: 1;
+}
+
+body.page-contact .page-heading {
+  margin-bottom: 0.75rem;
+}
+
+.page-subheading {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  text-align: center;
+  margin-bottom: 3rem;
+  line-height: 1.7;
+}
+
+/* The card that the text sits on */
+.contact-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+/* Each contact row */
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.5rem;
+  border-bottom: 1px solid var(--card-border);
+  transition: background 0.2s ease;
+}
+
+.contact-row:last-child {
+  border-bottom: none;
+}
+
+.contact-row:hover {
+  background: rgba(100, 180, 255, 0.03);
+}
+
+/* contact-row used as a plain div (copy rows) gets pointer cursor */
+.contact-row.is-copy {
+  cursor: pointer;
+}
+
+/* Icon */
+.contact-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--color-pink);
+}
+
+/* Label */
+.contact-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-pink);
+  flex-shrink: 0;
+  min-width: 90px;
+}
+
+.contact-value {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  margin-left: auto;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: text;
+}
+
+@media (max-width: 600px) {
+  body.page-contact nav { padding: 0 1.25rem; }
+  body.page-contact .nav-links { gap: 1.5rem; }
+  body.page-contact main { padding: calc(var(--nav-height) + 2rem) 1.25rem 4rem; }
+  .contact-row { padding: 1.5rem; gap: 1rem; }
+}
+
+/* #endregion */

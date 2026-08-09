@@ -9,295 +9,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
 
-  <style>
-    :root {
-      --color-bg:      #00000a;
-      --color-text:    #d8dcf0;
-      --color-muted:   #45485e;
-      --color-blue:    rgb(100, 180, 255);
-      --color-purple:  rgb(160, 100, 255);
-      --color-pink:    rgb(255, 100, 180);
-      --nav-height:    54px;
-
-      /* Card background */
-      --card-bg:       rgba(8, 6, 18, 0.82);
-      --card-border:   rgba(100, 180, 255, 0.07);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; }
-
-    body {
-      background-color: var(--color-bg);
-      color: var(--color-text);
-      font-family: 'Outfit', sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-    }
-
-    a { text-decoration: none; color: inherit; }
-    ::selection { background: rgba(140, 60, 255, 0.4); color: #fff; }
-
-
-    #canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: block;
-      z-index: 0;
-    }
-
-
-    /* Nav, fixed navigation bar */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 300;
-      height: var(--nav-height);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2.5rem;
-      background: rgba(4, 2, 14, 0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 2px solid rgba(255, 60, 155, 0.75);
-    }
-
-    .nav-logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: #fff;
-    }
-    .nav-logo .accent { color: var(--color-blue); }
-
-    .nav-links { list-style: none; display: flex; gap: 2.5rem; }
-    .nav-links a {
-      font-size: 0.8rem;
-      letter-spacing: 0.06em;
-      color: var(--color-muted);
-      transition: color 0.2s ease;
-    }
-    .nav-links a:hover { color: var(--color-pink); }
-
-
-    /* Main scroll wrapper */
-    main {
-      position: relative;
-      z-index: 1;
-    }
-
-
-    /* Hero spacer */
-    #hero {
-      height: 100vh;
-      width: 100%;
-      background: transparent;
-      position: relative;
-    }
-
-    /* Scroll hint — absolutely positioned to the bottom of the hero spacer,
-       so it always appears just above the fold on every screen size */
-    #scroll-hint {
-      position: absolute;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.6rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: #ffffff;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      text-align: center;
-    }
-
-    #scroll-hint .arrow {
-      font-size: 1rem;
-      letter-spacing: 0;
-    }
-
-    /* About section */
-    #about {
-      position: relative;
-      min-height: 100vh;
-      padding: calc(var(--nav-height) + 4rem) 2rem 6rem;
-      background: transparent;
-    }
-
-    /* The card that the text sits on */
-    .about-card {
-      max-width: 800px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 6px;
-      padding: 3rem 3.5rem;
-
-      /* Backdrop blur so the card feels layered */
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .about-heading {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      color: #fff;
-      text-align: center;
-      margin-bottom: 2.5rem;
-      text-shadow:
-        0 0 60px rgba(140, 60, 255, 0.45),
-        0 0 120px rgba(68, 155, 255, 0.12);
-    }
-
-    .about-bio {
-      font-size: 1rem;
-      line-height: 1.9;
-      color: rgba(210, 215, 240, 0.75);
-      margin-bottom: 1.3rem;
-    }
-    .about-bio .highlight-pink { color: var(--color-pink); font-weight: 500; }
-    .about-bio .highlight-blue { color: var(--color-blue); font-weight: 500; }
-
-    .divider {
-      width: 64px; height: 1px;
-      background: linear-gradient(90deg,
-        rgba(100, 180, 255, 0.7),
-        rgba(140, 60, 255, 0.5),
-        rgba(255, 60, 175, 0.2));
-      margin: 2.5rem 0;
-    }
-
-    /* Skills grid */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2.5rem 3rem;
-    }
-
-    .skills-column-label {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.60rem;
-      letter-spacing: 0.30em;
-      text-transform: uppercase;
-      font-weight: 700;
-      margin-bottom: 1.2rem;
-    }
-    .skills-column-label.blue { color: rgba(100, 180, 255, 0.90); }
-    .skills-column-label.pink { color: rgba(255, 100, 180, 0.90); }
-
-    .skills-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .skills-list li {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 0.92rem;
-      color: rgba(215, 220, 245, 0.80);
-    }
-
-    .sk { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-    .sk.b { background: rgba(100, 180, 255, 0.9); }
-    .sk.p { background: rgba(160, 100, 255, 0.9); }
-    .sk.m { background: rgba(255, 100, 180, 0.9); }
-
-    /* Buttons */
-    .button-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 3rem; }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.72rem 1.75rem;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.60rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      font-weight: 700;
-      border: none;
-      border-radius: 2px;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
-
-    .btn-solid { background: var(--color-blue); color: #000; }
-    .btn-solid:hover {
-      background: rgb(140, 210, 255);
-      box-shadow: 0 0 22px rgba(100, 180, 255, 0.45);
-      transform: translateY(-2px);
-    }
-
-    .btn-outline {
-      border: 1px solid rgba(160, 100, 255, 0.40);
-      color: rgba(185, 140, 255, 0.9);
-      background: transparent;
-    }
-    .btn-outline:hover {
-      border-color: rgba(160, 100, 255, 0.85);
-      background: rgba(160, 100, 255, 0.07);
-      box-shadow: 0 0 18px rgba(160, 100, 255, 0.15);
-      transform: translateY(-2px);
-    }
-
-
-    /* Footer, also on card */
-    footer {
-      position: relative;
-      z-index: 1;
-      background: rgba(4, 2, 14, 0.90);
-      border-top: 1px solid rgba(255, 60, 155, 0.20);
-      padding: 1.75rem 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .footer-text {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.56rem;
-      letter-spacing: 0.22em;
-      color: var(--color-muted);
-    }
-
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: #000; }
-    ::-webkit-scrollbar-thumb { background: rgba(160, 100, 255, 0.25); border-radius: 2px; }
-
-    @media (max-width: 600px) {
-      nav { padding: 0 1.25rem; }
-      .nav-links { gap: 1.5rem; }
-      .about-card { padding: 2rem 1.5rem; }
-      .skills-grid { grid-template-columns: 1fr; gap: 2rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="global.css" />
 </head>
-<body>
+<body class="page-index">
 
   <!-- Fixed canvas background, never scrolls -->
   <canvas id="canvas"></canvas>
 
   <!-- Fixed nav sits above the canvas -->
   <nav>
-    <a href="https://github.com/RamBruTan" class="nav-logo">RamBruTan<span class="accent">.</span></a>
+    <a href="https://github.com/RamBruTan" class="nav-logo">RamBruTan<span class="accent"></span></a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="projects.html">Work & Projects</a></li>
@@ -324,14 +45,14 @@
         <h1 class="about-heading">About Me</h1>
 
         <p class="about-bio">
-          I'm <span class="highlight-pink">Bruce Tan</span>, a developer, artist, and
+          Hello! I'm Bruce Tan, a developer, artist, and
           mathematician who loves doing work at the intersection of STEM and art.
-          From web apps to paintings to researching stellations, I bring passion,
-          experimentation, and curiosity to everything I make.
+          From web apps to paintings to researching stellations, I bring interdisciplinary
+          experimentation and curiosity to everything I make.
         </p>
         <p class="about-bio">
           In my personal life, aside from my aforementioned specializations, I also spin poi,
-          design and fold origami, and create Desmos graphs.
+          design and fold origami, and create Desmos .
         </p>
 
         <div class="divider"></div>
@@ -352,6 +73,7 @@
             <ul class="skills-list">
               <li><span class="sk m"></span>TypeScript</li>
               <li><span class="sk m"></span>React</li>
+              <li><span class="sk m"></span>SPARQL</li>
             </ul>
           </div>
         </div>
@@ -573,9 +295,9 @@
       const deltaTime      = Math.min((timestamp - (lastFrameTime || timestamp)) / 1000, 0.05);
       lastFrameTime = timestamp;
 
-      // Spawn dots at 0s, 0.33s, 0.66s
+      // Spawn dots at 0.5s, 0.83s, 1.16s
       for (let i = 0; i < 3; i++) {
-        if (!dots[i].born && elapsedSeconds >= i * 0.33) {
+        if (!dots[i].born && elapsedSeconds >= 0.5 + i * 0.33) {
           const span  = Math.min(canvasWidth, canvasHeight) * 0.22;
           dots[i].x   = canvasWidth  * 0.5 + SPAWN_OFFSETS[i].x * span + (Math.random() - 0.5) * 20;
           dots[i].y   = canvasHeight * 0.5 + SPAWN_OFFSETS[i].y * span + (Math.random() - 0.5) * 20;

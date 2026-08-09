@@ -5,6 +5,7 @@ desktop.ini
 
 # Ignore Visual Studio folder
 .vs/
+.vscode/
 *.user
 *.suo
 
