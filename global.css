@@ -547,7 +547,7 @@ body.page-projects .page-heading {
   cursor: pointer;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 600px) {
   body.page-projects nav { padding: 0 1.25rem; }
   body.page-projects .nav-links { gap: 1.5rem; }
   body.page-projects main { padding: calc(var(--nav-height) + 2rem) 1.25rem 4rem; }
