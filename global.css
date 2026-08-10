@@ -562,6 +562,30 @@ body.page-projects .page-heading {
   -webkit-backdrop-filter: blur(10px);
 }
 
+.art-modal-close {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.9rem;
+
+  background: none;
+  border: none;
+  color: var(--color-muted);
+
+  font-family: Arial, sans-serif;
+  font-size: 1.8rem;
+  font-weight: 300;
+  line-height: 1;
+
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.art-modal-close:hover {
+  color: var(--color-pink);
+  transform: scale(1.1);
+}
 
 /* #endregion */
 

@@ -80,7 +80,7 @@
              onclick="openArtModal(this)"
              data-title="Lightning in a Bottle"
              data-img="images/LightningInABottle.png"
-             data-desc="A work depicting electricity and power. I decided to use digital art, quite literally being electronic art. To make the complexity of the lightning, I decided to make a fractal,  and to add more impact to the lightning, I decided to layer the printed piece behind plexiglass, and then break the plexiglass with a hammer to create cracks.">
+             data-desc="A work depicting electricity and power. I used digital art, quite literally being electronic art. To make the complexity of the lightning, I incorporated a fractal I generated in a graphing calculator,  and to add more impact to the lightning, I layered the printed piece behind plexiglass, and then break the plexiglass with a hammer to create cracks.">
           <div class="project-img" style="background-image: url('images/LightningInABottle.png')">
           </div>
           <div class="project-info">
@@ -526,6 +526,7 @@
   <!-- Art modal, clicking the overlay closes it -->
   <div id="art-modal" onclick="handleModalClick(event)">
     <div class="art-modal-card">
+      <button type="button" class="art-modal-close" onclick="closeArtModal()" aria-label="Close modal">&times;</button>
       <div class="art-modal-title" id="modal-title"></div>
       <div class="art-modal-body">
         <div class="art-modal-img"  id="modal-img"></div>
