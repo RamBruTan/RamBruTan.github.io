@@ -34,12 +34,14 @@
       <p>I put whatever stuff I'm working on here, be it years-long projects, or just things I whip up in my free time!</p>
       <br />
       <p>When something fits into multiple categories, I'll put it under the more specific category, so origami wouldn't go under "Art & Works." However, this is somewhat arbitrary, and if I feel it fits in multiple equally well, I may put the same project in multiple categories.</p>
+      <br />
+      <p>Click on any card to view more details or go to its respective website.</p>
     </div>
     <!-- Tab bar -->
     <div class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('art',       this)">Art & Works</button>
       <button class="tab-btn"        onclick="switchTab('research',  this)">Research</button>
-      <button class="tab-btn"        onclick="switchTab('webapps',   this)">Web Apps</button>
+      <button class="tab-btn"        onclick="switchTab('webapps',   this)">Web Apps & Pages</button>
       <button class="tab-btn"        onclick="switchTab('origami',    this)">Origami</button>
       <button class="tab-btn"        onclick="switchTab('desmos',    this)">Desmos</button>
       <button class="tab-btn"        onclick="switchTab('misc',      this)">Misc</button>
@@ -241,22 +243,20 @@
 
         <div class="project-card"
              onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
-             data-href="https://rambrutan.github.io/human-art-in-the-age-of-ai/"
+             data-href="https://doi.org/10.31235/osf.io/r4wu2_v1"
 >
           <div class="project-img" style="background-image: url('images/PaperTitle.png')">
           </div>
           <div class="project-info">
             <div class="project-title blue">A Productivity Fixated World in the Age of AI: Investigating The Purpose of Human Art</div>
             <p class="project-desc">
-              Research I conducted as a high school student on exploring the purpose of human art (and creativity in general) in a world that is becoming increasingly fixated on AI. This research analyses this through the lens of the impact of AI substitution on the artist.
+              Research I conducted as a high school student on exploring the purpose of human art (and creativity in general) in a world that is becoming increasingly fixated on AI. This research analyses this through the lens of the impact of AI substitution on the artist. View the paper at its preprint DOI by clicking on this card, or on the custom web page I made for it, in the Web Apps & Pages tab.
             </p>
             <div class="project-tags">
               <span class="tag">Art</span>
               <span class="tag">Psychology</span>
               <span class="tag">AI</span>
             </div>
-            <a href="https://rambrutan.github.io/human-art-in-the-age-of-ai/" class="project-link">View Website</a>
-            <a href="https://rambrutan.github.io/human-art-in-the-age-of-ai/Bruce%20Tan%20-%20Synthesis%20Paper.pdf" class="project-link">Read The Paper</a>
           </div>
         </div>
 
@@ -264,7 +264,7 @@
     </div>
     <!-- #endregion-->
 
-    <!-- #region WEB APPS TAB -->
+    <!-- #region WEB APPS & PAGES TAB -->
     <div class="tab-panel" id="tab-webapps">
       <div class="project-grid">
 
@@ -276,10 +276,29 @@
           <div class="project-info">
             <div class="project-title pink">Matrix Calculator</div>
             <p class="project-desc">
-              Desmos style typing environment that supports matrices, along with a variety of other functions as seen in the documentation.
+              Desmos style typing environment that supports matrices, along with a variety of other functions as seen in the documentation. The project was made to experiment with AI assisted coding, but it turned out quite messy. I'll likely remake a new version at some point.
             </p>
             <div class="project-tags">
+              <span class="tag">Web App</span>
               <span class="tag">TypeScript</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="project-card"
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://rambrutan.github.io/human-art-in-the-age-of-ai/"
+>
+          <div class="project-img" style="background-image: url('images/PaperTitle.png')">
+          </div>
+          <div class="project-info">
+            <div class="project-title blue">A Productivity Fixated World in the Age of AI: Investigating The Purpose of Human Art</div>
+            <p class="project-desc">
+              Website I made for my high school research paper exploring the purpose of human art in a world increasingly focused on AI. The DOI can be from this web page, or from the Research tab. 
+            </p>
+            <div class="project-tags">
+              <span class="tag">Web Page</span>
+              <span class="tag">HTML & CSS</span>
             </div>
           </div>
         </div>
