@@ -642,7 +642,7 @@
     }
 
     function openTabFromURL() {
-      const name = window.location.hash.substring(1);
+      const name = window.location.hash.substring(1).toLowerCase();
 
       if (name && document.getElementById('tab-' + name)) {
         switchTab(name);
