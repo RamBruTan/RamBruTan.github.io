@@ -31,7 +31,7 @@
 
     <h1 class="page-heading">Work & Projects</h1>
     <div class="project-card" style="text-align: center;">
-      <p>I put whatever stuff I'm working on here, be it years-long projects, or just things I whip up in my free time!</p>
+      <p>I put things I'm working on here, be it years-long projects, or just things I whip up in my free time!</p>
       <br />
       <p>When something fits into multiple categories, I'll put it under the more specific category, so origami wouldn't go under "Art & Works." However, this is somewhat arbitrary, and if I feel it fits in multiple equally well, I may put the same project in multiple categories.</p>
       <br />
@@ -452,22 +452,19 @@
         </div>
 
         <div class="project-card"
-             onclick="openArtModal(this)"
-             data-title="Crossroads"
-             data-img="images/Crossroads.png"
-             data-desc="3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect. Selected as a featured graph for the 2025 art contest! <a href='https://www.desmos.com/3d/b8gnp1ne4g?invertedColors' target='_blank'>View here</a>.">
-          <div class="project-img" style="background-image: url('images/Crossroads.png')">
+             onclick="if(this.dataset.href) window.open(this.dataset.href, '_blank')"
+             data-href="https://www.desmos.com/3d/b8gnp1ne4g?invertedColors">
+          <div class="project-img" style="background-image: url('images/CrossroadsUnmodified.png')">
           </div>
           <div class="project-info">
             <div class="project-title purple">Crossroads</div>
             <p class="project-desc">
-              3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect.
+              3D Desmos artwork based on the idea that two disciplines that are often thought to be different, such as math and art, may still intersect. Selected as a featured graph for the 2025 art contest! Takes a bit to initially load.
             </p>
             <div class="project-tags">
               <span class="tag">Art</span>
               <span class="tag">3D</span>
             </div>
-            <a href="https://www.desmos.com/3d/b8gnp1ne4g?invertedColors" class="project-link">View On Desmos</a>
           </div>
         </div>
 
